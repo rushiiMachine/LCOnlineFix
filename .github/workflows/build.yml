@@ -11,22 +11,22 @@ on:
 jobs:
   build:
     runs-on: windows-latest
+    timeout-minutes: 5
     steps:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 7.0.x
-          cache: true
-          cache-dependency-path: .
         
       - name: Checkout repository
         uses: actions/checkout@v2
         
       - name: Build
-        run: dotnet build LCOnlineFix
+        run: dotnet build .
       
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
-        with: 
+        with:
+          name: LCOnlineFix
           if-no-files-found: error
-          path: .\LCOnlineFix\bin\Debug\Debug\net35\LCOnlineFix.dll
+          path: .\bin\Debug\net35\LCOnlineFix.dll
