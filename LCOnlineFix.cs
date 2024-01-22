@@ -1,5 +1,8 @@
-﻿using BepInEx;
+﻿using System.Reflection;
+using BepInEx;
 using HarmonyLib;
+
+// ReSharper disable UnusedMember.Local InconsistentNaming RedundantAssignment
 
 namespace LCOnlineFix;
 
@@ -7,8 +10,19 @@ namespace LCOnlineFix;
 [BepInProcess("Lethal Company.exe")]
 public class LCOnlineFix : BaseUnityPlugin
 {
-    private void Awake()
+    private void Awake() => Harmony.CreateAndPatchAll(typeof(LCOnlineFix).Assembly, "lconlinefix");
+
+    [HarmonyPatch]
+    private static class FacepunchTransportPatch
     {
-        Harmony.CreateAndPatchAll(typeof(LCOnlineFix).Assembly)
+        private const int SPACEWAR_APP_ID = 480;
+
+        [HarmonyTargetMethod]
+        private static MethodBase Target() =>
+            AccessTools.Method("Netcode.Transports.Facepunch.FacepunchTransport:Awake");
+
+        [HarmonyPrefix]
+        private static void Before(ref uint ___steamAppId) =>
+            ___steamAppId = SPACEWAR_APP_ID;
     }
 }
