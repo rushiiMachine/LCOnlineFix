@@ -6,7 +6,7 @@ using HarmonyLib;
 
 namespace LCOnlineFix;
 
-[BepInPlugin("lconlinefix", "LCOnlineFix", "1.0.0")]
+[BepInPlugin("lconlinefix", "LCOnlineFix", "1.0.1")]
 public class LCOnlineFix : BaseUnityPlugin
 {
     private void Awake() => Harmony.CreateAndPatchAll(typeof(LCOnlineFix).Assembly, "lconlinefix");
